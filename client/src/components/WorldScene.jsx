@@ -3,6 +3,7 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Html } from "@react-three/drei";
 import { Suspense } from "react";
+import DriveCar from "./DriveCar";
 
 const projects = [
   { title: "DejaView AI", desc: "Memory + FAISS + AI", z: -5 },
@@ -62,6 +63,9 @@ export default function WorldScene() {
         <directionalLight position={[5, 10, 5]} intensity={1.1} />
 
         <Suspense fallback={null}>
+<DriveCar />
+
+
           <Ground />
           <Road />
 
