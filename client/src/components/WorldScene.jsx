@@ -4,6 +4,8 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Html } from "@react-three/drei";
 import { Suspense } from "react";
 import DriveCar from "./DriveCar";
+import FollowCamera from "./FollowCamera";
+import { useRef } from "react";
 
 const projects = [
   { title: "DejaView AI", desc: "Memory + FAISS + AI", z: -5 },
@@ -53,17 +55,23 @@ function ProjectWall({ title, desc, side = "left", z }) {
 }
 
 export default function WorldScene() {
+    const carRef = useRef();
+
   return (
     <div className="w-full h-screen bg-black">
       <Canvas camera={{ position: [8, 6, 8], fov: 50 }}>
-        <color attach="background" args={["#050510"]} />
+        {/* <color attach="background" args={["#050510"]} /> */}
+        <color attach="background" args={["#87CEEB"]} /> {/* sky blue */}
+    <fog attach="fog" args={["#87CEEB", 10, 60]} />  {/* far-away fade */}
 
         {/* Lights */}
         <ambientLight intensity={0.4} />
         <directionalLight position={[5, 10, 5]} intensity={1.1} />
 
         <Suspense fallback={null}>
-<DriveCar />
+<DriveCar ref={carRef} />
+<FollowCamera target={carRef} />
+
 
 
           <Ground />
