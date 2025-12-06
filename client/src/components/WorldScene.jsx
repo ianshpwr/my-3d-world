@@ -1,12 +1,12 @@
 "use client";
-
+import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Html } from "@react-three/drei";
 import { Suspense } from "react";
 import DriveCar from "./DriveCar";
 import FollowCamera from "./FollowCamera";
 import { useRef } from "react";
-
+import { useTexture } from "@react-three/drei";
 const projects = [
   { title: "DejaView AI", desc: "Memory + FAISS + AI", z: -5 },
   { title: "Fleetcode Arena", desc: "1v1 DSA battles", z: -15 },
@@ -24,14 +24,17 @@ function Road() {
 }
 
 function Ground() {
+  const texture = useTexture("/textures/mud.jpg");
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(20, 20);
+
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, -15]}>
-      <planeGeometry args={[50, 50]} />
-      <meshStandardMaterial color="#050508" />
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, -15]} receiveShadow>
+      <planeGeometry args={[200, 200]} />
+      <meshStandardMaterial map={texture} />
     </mesh>
   );
 }
-
 function ProjectWall({ title, desc, side = "left", z }) {
   const x = side === "left" ? -3 : 3; // left/right of road
 
@@ -63,6 +66,14 @@ export default function WorldScene() {
         {/* <color attach="background" args={["#050510"]} /> */}
         <color attach="background" args={["#87CEEB"]} /> {/* sky blue */}
     <fog attach="fog" args={["#87CEEB", 10, 60]} />  {/* far-away fade */}
+<ambientLight intensity={0.8} />
+<directionalLight 
+  position={[10, 20, 10]} 
+  intensity={1.5} 
+  castShadow 
+  shadow-mapSize-width={2048}
+  shadow-mapSize-height={2048}
+/>
 
         {/* Lights */}
         <ambientLight intensity={0.4} />
